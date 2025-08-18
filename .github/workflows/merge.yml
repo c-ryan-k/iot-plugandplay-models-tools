@@ -25,6 +25,7 @@ jobs:
     name: 'Evaluating dotnet clients'
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-13 ] 
         tfm: [ net6.0, net7.0 ]
