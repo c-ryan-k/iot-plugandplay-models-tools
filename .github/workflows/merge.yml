@@ -54,10 +54,6 @@ jobs:
 
     - name: 'Execute solution Microsoft.IoT.ModelsRepository.CommandLine tests'
       run: dotnet test --no-build clients/dotnet/Microsoft.IoT.ModelsRepository.CommandLine --framework ${{ matrix.tfm }} --blame-hang
-      env:
-        DOTNET_CLI_TELEMETRY_OPTOUT: "1"
-        DOTNET_NOLOGO: "1"
-        DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "1"
 
     - name: 'Build solution Microsoft.IoT.ModelsRepository.ChangeCalc'
       run: dotnet build .github/actions/changecalc/Microsoft.IoT.ModelsRepository.ChangeCalc/src
