@@ -4,7 +4,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Collections.Generic;
 
 
 namespace Microsoft.IoT.ModelsRepository.CommandLine.Tests
@@ -18,7 +17,7 @@ namespace Microsoft.IoT.ModelsRepository.CommandLine.Tests
             string moniker = GetFrameworkMoniker();
             var cmdsi = new ProcessStartInfo("dotnet")
             {
-                Arguments = $"run {GetBuildParam()} --framework {moniker} -- {commandArgs}",
+                Arguments = $"run {GetBuildParam()} --no-launch-profile --framework {moniker} -- {commandArgs}",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
@@ -30,32 +29,7 @@ namespace Microsoft.IoT.ModelsRepository.CommandLine.Tests
             string standardError = cmd.StandardError.ReadToEnd();
 
             cmd.WaitForExit(10000);
-            
-            // Clean launch settings output from standardOut for consistent test behavior
-            standardOut = CleanLaunchSettingsOutput(standardOut);
-            
             return (cmd.ExitCode, standardOut, standardError);
-        }
-
-        private static string CleanLaunchSettingsOutput(string output)
-        {
-            if (string.IsNullOrEmpty(output))
-                return output;
-
-            var lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            var cleanedLines = new List<string>();
-
-            foreach (var line in lines)
-            {
-                // Skip lines that contain launch settings messages
-                if (line.StartsWith("Using launch settings from"))
-                {
-                    continue;
-                }
-                cleanedLines.Add(line);
-            }
-
-            return cleanedLines.Count == 0 ? string.Empty : string.Join(Environment.NewLine, cleanedLines);
         }
 
         public static string GetFrameworkMoniker()
